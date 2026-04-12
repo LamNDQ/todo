@@ -30,6 +30,7 @@ frontend/.env
 ```bash
 VITE_API_URL
 ```
+---
 
 ## 3. Chạy project
 
