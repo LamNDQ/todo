@@ -1,0 +1,287 @@
+:root {
+    --bg: #0b0d13;
+    --bg-2: #0f111a;
+    --surface: rgba(255, 255, 255, 0.04);
+    --surface-hover: rgba(255, 255, 255, 0.07);
+    --border: rgba(255, 255, 255, 0.08);
+    --border-hover: rgba(255, 255, 255, 0.16);
+    --accent: #7c6eff;
+    --accent-soft: rgba(124, 110, 255, 0.14);
+    --accent-glow: rgba(124, 110, 255, 0.32);
+    --success: #34d39a;
+    --success-soft: rgba(52, 211, 154, 0.12);
+    --danger: #ff5e7d;
+    --danger-soft: rgba(255, 94, 125, 0.12);
+    --warn: #fbbf24;
+    --text-1: #f0f0f8;
+    --text-2: rgba(240, 240, 248, 0.52);
+    --text-3: rgba(240, 240, 248, 0.28);
+    --sidebar-w: 240px;
+    --radius: 16px;
+    --radius-sm: 10px;
+    --radius-xs: 7px;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text-1);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+button,
+input {
+    font-family: inherit;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-hover);
+    border-radius: 10px;
+}
+
+.app-layout {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    background: var(--bg);
+    position: relative;
+}
+
+.page-wrapper {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+    position: relative;
+}
+
+.page-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 36px;
+    animation: fadeDown .5s ease both;
+}
+
+.page-icon {
+    font-size: 32px;
+    color: var(--accent);
+    flex-shrink: 0;
+}
+
+.page-icon.spin {
+    display: inline-block;
+    animation: spin 10s linear infinite;
+}
+
+.page-title {
+    font-family: 'Roboto', sans-serif;
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 800;
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #fff 30%, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1.1;
+}
+
+.page-subtitle {
+    color: var(--text-2);
+    font-size: 13px;
+    margin-top: 2px;
+}
+
+.error-card {
+    background: var(--danger-soft);
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    font-size: 14px;
+    margin-top: 16px;
+    animation: fadeUp .3s ease both;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--text-3);
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    margin-top: 16px;
+}
+
+.empty-icon {
+    font-size: 36px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.empty-state p {
+    font-size: 14px;
+}
+
+@keyframes fadeDown {
+    from {
+        opacity: 0;
+        transform: translateY(-14px)
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0)
+    }
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(14px)
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0)
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px)
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0)
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg)
+    }
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0)
+    }
+
+    20% {
+        transform: translateX(-8px)
+    }
+
+    40% {
+        transform: translateX(8px)
+    }
+
+    60% {
+        transform: translateX(-5px)
+    }
+
+    80% {
+        transform: translateX(5px)
+    }
+}
+
+@media (max-width:768px) {
+    :root {
+        --sidebar-w: 200px;
+    }
+
+    .page-wrapper {
+        padding: 36px 24px 70px;
+    }
+
+    .page-title {
+        font-size: 26px;
+    }
+}
+
+@media (max-width:600px) {
+    .app-layout {
+        flex-direction: column-reverse;
+    }
+
+    .main-content {
+        flex: 1;
+        overflow-y: auto;
+        padding-bottom: 70px;
+    }
+
+    .page-wrapper {
+        padding: 24px 16px 16px;
+        max-width: 100%;
+    }
+
+    .page-header {
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+
+    .page-icon {
+        font-size: 24px;
+    }
+
+    .page-title {
+        font-size: 22px;
+    }
+
+    .page-subtitle {
+        font-size: 12px;
+    }
+
+    .error-card {
+        font-size: 13px;
+        padding: 12px 14px;
+    }
+}
+
+@media (max-width:380px) {
+    .page-wrapper {
+        padding: 20px 12px 12px;
+    }
+
+    .page-title {
+        font-size: 20px;
+    }
+}
