@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
-import redis from '../config/redis.js';
+import redis from '../../config/redis.js';
 
 const generateTokens = (userId, role) => {
     const accessToken = jwt.sign(
