@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { toast } from 'react-toastify'
@@ -15,20 +15,24 @@ function Sidebar() {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { user } = useSelector((s) => s.auth)
+    const [busy, setBusy] = useState(false)
 
     const handleLogout = async () => {
+        setBusy(true)
         await dispatch(logout())
-        toast.info('Logged out')
+        toast.info('Logged out successfully')
         navigate('/login')
     }
 
     return (
         <aside className="sidebar">
+            {/* Brand */}
             <div className="sidebar-brand">
                 <span className="brand-dot" />
                 <span className="brand-name">Workspace</span>
             </div>
 
+            {/* Nav links */}
             <nav className="sidebar-nav">
                 {NAV_ITEMS.map(({ path, label, icon }) => (
                     <NavLink
@@ -54,12 +58,29 @@ function Sidebar() {
                 )}
             </nav>
 
+            {/* Footer: user info + logout */}
             <div className="sidebar-footer">
-                <div className="user-info">
-                    <span className="user-avatar">{user?.username?.[0]?.toUpperCase()}</span>
-                    <span className="user-name">{user?.username}</span>
+                {/* Avatar + name + role */}
+                <div className="sidebar-user">
+                    <div className="user-avatar">
+                        {user?.username?.[0]?.toUpperCase() ?? '?'}
+                    </div>
+                    <div className="user-meta">
+                        <span className="user-name">{user?.username}</span>
+                        <span className="user-role">{user?.role}</span>
+                    </div>
                 </div>
-                <button className="logout-btn" onClick={handleLogout} title="Logout">⏻</button>
+
+                {/* Logout button */}
+                <button
+                    className="logout-btn"
+                    onClick={handleLogout}
+                    disabled={busy}
+                    title="Sign out"
+                >
+                    <span className="logout-icon">→</span>
+                    <span className="logout-label">Sign out</span>
+                </button>
             </div>
         </aside>
     )
