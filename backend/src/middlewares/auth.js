@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/User';
+import User from '../models/User.js';
 
-export const athenticate = async (req, res) => {
+export const authenticate = async (req, res, next) => {
     try {
-        const authHeader = req.header.authorization;
+        const authHeader = req.headers.authorization;
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
             return res.status(401).json({ message: 'Access token required' });
         }
@@ -31,7 +31,6 @@ export const athenticate = async (req, res) => {
     }
 };
 
-// Only allow specific roles
 export const authorize = (...roles) => (req, res, next) => {
     if (!roles.includes(req.user.role)) {
         return res.status(403).json({
