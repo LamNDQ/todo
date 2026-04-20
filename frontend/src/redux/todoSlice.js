@@ -3,81 +3,49 @@ import axios from 'axios'
 
 const API = '/api/tasks'
 
-// ── Async thunks ──────────────────────────────────────────────────────────────
+const authHeader = (token) => ({ headers: { Authorization: `Bearer ${token}` } })
 
-export const fetchTodos = createAsyncThunk('todos/fetchAll', async () => {
-    const { data } = await axios.get(API)
+export const fetchTodos = createAsyncThunk('todos/fetchAll', async (_, { getState }) => {
+    const token = getState().auth.accessToken
+    const { data } = await axios.get(API, authHeader(token))
     return data
 })
 
-// export const fetchTasks = createAsyncThunk(
-//     "tasks/fetchTasks",
-//     async ({ page = 1, limit = 5, sort = "createdAt", order = "desc" }) => {
-//         const res = await fetch(
-//             `/api/tasks?page=${page}&limit=${limit}&sort=${sort}&order=${order}`
-//         );
-
-//         const data = await res.json();
-//         return data;
-//     }
-// );
-
-export const createTodo = createAsyncThunk('todos/create', async (title) => {
-    const { data } = await axios.post(API, { title })
+export const createTodo = createAsyncThunk('todos/create', async (title, { getState }) => {
+    const token = getState().auth.accessToken
+    const { data } = await axios.post(API, { title }, authHeader(token))
     return data
 })
 
-export const updateTodo = createAsyncThunk('todos/update', async ({ id, ...fields }) => {
-    const { data } = await axios.put(`${API}/${id}`, fields)
+export const updateTodo = createAsyncThunk('todos/update', async ({ id, ...fields }, { getState }) => {
+    const token = getState().auth.accessToken
+    const { data } = await axios.put(`${API}/${id}`, fields, authHeader(token))
     return data
 })
 
-export const deleteTodo = createAsyncThunk('todos/delete', async (id) => {
-    await axios.delete(`${API}/${id}`)
+export const deleteTodo = createAsyncThunk('todos/delete', async (id, { getState }) => {
+    const token = getState().auth.accessToken
+    await axios.delete(`${API}/${id}`, authHeader(token))
     return id
 })
 
-// ── Slice ─────────────────────────────────────────────────────────────────────
-
 const todoSlice = createSlice({
     name: 'todos',
-    initialState: {
-        items: [],
-        loading: false,
-        error: null,
-        // page: 1,
-        // totalPages: 1,
-    },
+    initialState: { items: [], loading: false, error: null },
     reducers: {},
     extraReducers: (builder) => {
-        // fetch
         builder
-            .addCase(fetchTodos.pending, (state) => { state.loading = true })
-            .addCase(fetchTodos.fulfilled, (state, { payload }) => {
-                state.loading = false
-                state.items = payload
-                // state.page = action.payload.page;
-                // state.totalPages = action.payload.totalPages;
-            })
-            .addCase(fetchTodos.rejected, (state, { error }) => {
-                state.loading = false
-                state.error = error.message
-            })
+            .addCase(fetchTodos.pending, (s) => { s.loading = true })
+            .addCase(fetchTodos.fulfilled, (s, { payload }) => { s.loading = false; s.items = payload })
+            .addCase(fetchTodos.rejected, (s, { error }) => { s.loading = false; s.error = error.message })
 
-        // create
-        builder.addCase(createTodo.fulfilled, (state, { payload }) => {
-            state.items.unshift(payload)
+        builder.addCase(createTodo.fulfilled, (s, { payload }) => { s.items.unshift(payload) })
+        builder.addCase(updateTodo.fulfilled, (s, { payload }) => {
+            const i = s.items.findIndex((t) => t._id === payload._id)
+            if (i !== -1) s.items[i] = payload
         })
-
-        // update
-        builder.addCase(updateTodo.fulfilled, (state, { payload }) => {
-            const idx = state.items.findIndex((t) => t._id === payload._id)
-            if (idx !== -1) state.items[idx] = payload
-        })
-
-        // delete
-        builder.addCase(deleteTodo.fulfilled, (state, { payload }) => {
-            state.items = state.items.filter((t) => t._id !== payload)
+        builder.addCase(deleteTodo.fulfilled, (s, { payload }) => {
+            s.items = s.items.filter((t) => t._id !== payload)
         })
     },
 })
