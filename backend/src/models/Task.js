@@ -8,18 +8,22 @@ const taskSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ["active", "completed"],
+        enum: ['active', 'completed'],
         default: 'active',
     },
     completedAt: {
         type: Date,
         default: null,
     },
-}, { timestamps: true });  // Automatically adds createdAt and updatedAt fields
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
+}, { timestamps: true });
 
-// taskSchema.index({ createdAt: -1 });
-// taskSchema.index({ status: 1 });
+taskSchema.index({ user: 1, createdAt: -1 });
+taskSchema.index({ status: 1 });
 
 const Task = mongoose.model('Task', taskSchema);
-
 export default Task;
