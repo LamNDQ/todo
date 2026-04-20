@@ -10,7 +10,10 @@ const saveToken = (token) => token
 
 export const register = createAsyncThunk('auth/register', async (data, { rejectWithValue }) => {
     try {
-        const res = await axios.post(`${API}/register`, data)
+        const { data } = await axios.post(
+            `${import.meta.env.VITE_API_URL || ''}/api/auth/refresh`,
+            { refreshToken }
+        )
         return res.data
     } catch (err) {
         return rejectWithValue(err.response?.data?.message || 'Registration failed')

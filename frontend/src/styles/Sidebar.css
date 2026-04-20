@@ -288,8 +288,9 @@
 }
 
 .user-role {
+    margin-left: 8px;
     font-size: 11px;
-    color: var(--text-3);
+    color: var(--text-1);
     text-transform: uppercase;
     letter-spacing: .05em;
 }
@@ -297,12 +298,11 @@
 .logout-btn {
     background: none;
     border: none;
-    color: var(--text-3);
+    color: var(--danger);
     cursor: pointer;
     font-size: 16px;
     padding: 4px;
     border-radius: 6px;
-    transition: color 0.2s, background 0.2s;
     flex-shrink: 0;
 }
 

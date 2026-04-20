@@ -2,7 +2,11 @@ import axios from 'axios'
 import { store } from '../redux/store'
 import { setTokens, clearAuth } from '../redux/authSlice'
 
-const axiosInstance = axios.create()
+const BASE_URL = import.meta.env.VITE_API_URL || ''
+
+const axiosInstance = axios.create({
+    baseURL: BASE_URL,
+})
 
 // Attach access token to every request
 axiosInstance.interceptors.request.use((config) => {
