@@ -18,7 +18,11 @@ const PORT = process.env.PORT || 5001;
 const app = express();
 
 app.use(cors({
-    origin: ['http://localhost:5173', `http://localhost:${PORT}`],
+    origin: [
+        'http://localhost:5173',
+        'https://todo-git-main-lam-nguyns-projects.vercel.app/', // thêm domain Vercel của bạn
+        /\.vercel\.app$/,  // hoặc allow tất cả vercel.app subdomains
+    ],
     credentials: true,
 }));
 

@@ -1,10 +1,13 @@
 import Redis from 'ioredis';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
 import dotenv from 'dotenv';
+import { dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: join(__dirname, '../.env'), override: true });
+dotenv.config();
+
+// Fix __dirname trong ES Module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const redis = new Redis({
     host: process.env.REDIS_HOST || 'localhost',
